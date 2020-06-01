@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -79,48 +82,6 @@ public class AppItemListDialogFragment extends BottomSheetDialogFragment {
 
     }
 
-    private class ViewHolder extends RecyclerView.ViewHolder {
-
-        final TextView appName;
-        private final ImageView ivAppIcon;
-
-        ViewHolder(LayoutInflater inflater, ViewGroup parent) {
-            super(inflater.inflate(R.layout.item_sharing_app, parent, false));
-            ivAppIcon = itemView.findViewById(R.id.ivAppIcon);
-            appName = itemView.findViewById(R.id.tvAppName);
-        }
-    }
-/*
-    private class AppItemAdapter extends RecyclerView.Adapter<ViewHolder> {
-
-        private final Context mContext;
-        private final List<ResolveInfo> mAppLists;
-
-        public AppItemAdapter(Context mContext, List<ResolveInfo> mAppLists) {
-            this.mContext = mContext;
-            this.mAppLists = mAppLists;
-        }
-
-        @NonNull
-        @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new ViewHolder(LayoutInflater.from(parent.getContext()), parent);
-        }
-
-        @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            ResolveInfo item = mAppLists.get(position);
-            holder.appName.setText(item.activityInfo.name);
-            holder.ivAppIcon.setImageDrawable(item.activityInfo.);
-        }
-
-        @Override
-        public int getItemCount() {
-            return mAppLists.size();
-        }
-
-    }*/
-
 
     public class AppsAdapter extends BaseAdapter {
         private LayoutInflater inflater;
@@ -138,14 +99,26 @@ public class AppItemListDialogFragment extends BottomSheetDialogFragment {
                 convertView = inflater.inflate(R.layout.item_sharing_app, null);
                 hendler = new ViewHendler();
                 hendler.textLable = (TextView) convertView.findViewById(R.id.tvAppName);
-                hendler.iconImage = (ImageView) convertView.findViewById(R.id.imageViewIcon);
+                hendler.iconImage = (ImageView) convertView.findViewById(R.id.ivAppIcon);
                 convertView.setTag(hendler);
             } else {
                 hendler = (ViewHendler) convertView.getTag();
             }
             ResolveInfo info = this.mApps.get(position);
-            hendler.iconImage.setImageDrawable(info.loadIcon(mPackageManager));
+
+           // hendler.iconImage.setImageDrawable(info.loadIcon(mPackageManager));
             hendler.textLable.setText(info.loadLabel(mPackageManager));
+
+
+            String pkg =  info.activityInfo.packageName;
+            Drawable icon = null;
+            try {
+                icon = mContext.getPackageManager().getApplicationIcon(pkg);
+                hendler.iconImage.setImageDrawable(icon);
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+
 
             return convertView;
 

@@ -12,19 +12,20 @@ import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
+    Intent email = new Intent(Intent.ACTION_SEND);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         PackageManager pm = getPackageManager();
-        Intent email = new Intent(Intent.ACTION_SEND);
-        List<ResolveInfo> launchables = pm.queryIntentActivities(email, 0);
         email.putExtra(Intent.EXTRA_EMAIL, new String[]{});
-        email.putExtra(Intent.EXTRA_SUBJECT, "App Name");
-        email.putExtra(Intent.EXTRA_TEXT, "Hi,This is App");
+        email.putExtra(Intent.EXTRA_SUBJECT, "Hi");
+        email.putExtra(Intent.EXTRA_TEXT, "Hi,This is Test");
         email.setType("text/plain");
+
+        List<ResolveInfo> launchables = pm.queryIntentActivities(email, 0);
+
         Collections.sort(launchables,
                 new ResolveInfo.DisplayNameComparator(pm));
 
