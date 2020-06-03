@@ -25,7 +25,6 @@ import java.util.List;
 public class AppItemListDialogFragment extends BottomSheetDialogFragment implements ShareAdapter.ShareAppClickListner {
 
     public static final String TAG = AppItemListDialogFragment.class.getName();
-    // TODO: Customize parameter argument names
     private static final String ARG_ITEM_COUNT = "item_count";
     private static List<ResolveInfo> mAppLists;
     private static Context mContext;
